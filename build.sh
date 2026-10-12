@@ -52,4 +52,4 @@ if [[ -f /usr/lib/systemd/user/openrazer-daemon.service ]]; then
 fi
 
 dnf clean all
-rm -rf /var/cache/dnf /var/lib/dnf /var/log/dnf*
+rm -rf /var/cache/dnf /var/cache/libdnf5 /var/lib/dnf /var/log/dnf* /run/dnf
