@@ -14,13 +14,12 @@ fi
 
 shopt -s nullglob
 kmod_rpms=(/tmp/akmods-rpms/kmods/kmod-openrazer-*.rpm)
-common_rpms=(/tmp/akmods-rpms/common/openrazer-[0-9]*.rpm)
-if [[ ${#kmod_rpms[@]} -eq 0 || ${#common_rpms[@]} -eq 0 ]]; then
-    echo "OpenRazer RPMs not found in the akmods image" >&2
+if [[ ${#kmod_rpms[@]} -eq 0 ]]; then
+    echo "OpenRazer kernel RPM not found in the akmods image" >&2
     exit 1
 fi
 
-# Temporary Terra repo for the daemon. Its own kmod/akmod builds are excluded
+# Temporary Terra repo for matching userspace packages. Its kmod/akmod builds are excluded
 # so the signed Universal Blue module is the only one that can be installed.
 cat > /etc/yum.repos.d/terra-build.repo <<'EOF'
 [terra-build]
@@ -31,12 +30,12 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc
 enabled=1
-excludepkgs=akmod-openrazer kmod-openrazer* openrazer
+excludepkgs=akmod-openrazer kmod-openrazer*
 EOF
 
 dnf -y install \
     "${kmod_rpms[@]}" \
-    "${common_rpms[@]}" \
+    openrazer \
     openrazer-daemon \
     python3-openrazer
 
